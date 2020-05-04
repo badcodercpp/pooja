@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 
 const {getHomePage} = require('./routes/index');
-const {addPlayerPage, addPlayer, deletePlayer, editPlayer, editPlayerPage} = require('./routes/player');
+const {addPlayerPage, addPlayer, deletePlayer, editPlayer, editPlayerPage, serveImage} = require('./routes/player');
 const port = 2000;
 
 // create connection to database
@@ -14,8 +14,8 @@ const port = 2000;
 const db = mysql.createConnection ({
     host: 'localhost',
     user: 'root',
-    password: '',
-    database: 'socka'
+    password: 'root@1234',
+    database: 'test'
 });
 
 // connect to database
@@ -44,6 +44,7 @@ app.get('/edit/:id', editPlayerPage);
 app.get('/delete/:id', deletePlayer);
 app.post('/add', addPlayer);
 app.post('/edit/:id', editPlayer);
+app.get('/assets/img/:id', (req, res) => serveImage(req, res, __dirname));
 
 // set the app to listen on the port
 app.listen(port, () => {

@@ -15,9 +15,9 @@ module.exports = {
         let message = '';
         let first_name = req.body.first_name;
         let last_name = req.body.last_name;
-        let position = req.body.position;
-        let number = req.body.number;
-        let username = req.body.username;
+        let email = req.body.email;
+        let phone = req.body.phone;
+        let username = Date.now();
         let uploadedFile = req.files.image;
         let image_name = uploadedFile.name;
         let fileExtension = uploadedFile.mimetype.split('/')[1];
@@ -39,13 +39,13 @@ module.exports = {
                 // check the filetype before uploading it
                 if (uploadedFile.mimetype === 'image/png' || uploadedFile.mimetype === 'image/jpeg' || uploadedFile.mimetype === 'image/gif') {
                     // upload the file to the /public/assets/img directory
-                    uploadedFile.mv(`public/assets/img/${image_name}`, (err ) => {
+                    uploadedFile.mv(`${image_name}`, (err ) => {
                         if (err) {
                             return res.status(500).send(err);
                         }
                         // send the player's details to the database
-                        let query = "INSERT INTO `players` (first_name, last_name, position, number, image, user_name) VALUES ('" +
-                            first_name + "', '" + last_name + "', '" + position + "', '" + number + "', '" + image_name + "', '" + username + "')";
+                        let query = "INSERT INTO `players` (first_name, last_name, email, phone, image, user_name) VALUES ('" +
+                            first_name + "', '" + last_name + "', '" + email + "', '" + phone + "', '" + image_name + "', '" + username + "')";
                         db.query(query, (err, result) => {
                             if (err) {
                                 return res.status(500).send(err);
@@ -65,13 +65,13 @@ module.exports = {
     },
     editPlayerPage: (req, res) => {
         let playerId = req.params.id;
-        let query = "SELECT * FROM `players` WHERE id = '" + playerId + "' ";
+        let query = "SELECT * FROM `players` WHERE user_name = '" + playerId + "' ";
         db.query(query, (err, result) => {
             if (err) {
                 return res.status(500).send(err);
             }
             res.render('edit-player.ejs', {
-                title: "Edit  Player"
+                title: ""
                 ,player: result[0]
                 ,message: ''
             });
@@ -81,10 +81,10 @@ module.exports = {
         let playerId = req.params.id;
         let first_name = req.body.first_name;
         let last_name = req.body.last_name;
-        let position = req.body.position;
-        let number = req.body.number;
+        let email = req.body.email;
+        let phone = req.body.phone;
 
-        let query = "UPDATE `players` SET `first_name` = '" + first_name + "', `last_name` = '" + last_name + "', `position` = '" + position + "', `number` = '" + number + "' WHERE `players`.`id` = '" + playerId + "'";
+        let query = "UPDATE `players` SET `first_name` = '" + first_name + "', `last_name` = '" + last_name + "', `email` = '" + email + "', `phone` = '" + phone + "' WHERE `players`.`user_name` = '" + playerId + "'";
         db.query(query, (err, result) => {
             if (err) {
                 return res.status(500).send(err);
@@ -94,8 +94,8 @@ module.exports = {
     },
     deletePlayer: (req, res) => {
         let playerId = req.params.id;
-        let getImageQuery = 'SELECT image from `players` WHERE id = "' + playerId + '"';
-        let deleteUserQuery = 'DELETE FROM players WHERE id = "' + playerId + '"';
+        let getImageQuery = 'SELECT image from `players` WHERE user_name = "' + playerId + '"';
+        let deleteUserQuery = 'DELETE FROM players WHERE user_name = "' + playerId + '"';
 
         db.query(getImageQuery, (err, result) => {
             if (err) {
@@ -104,7 +104,7 @@ module.exports = {
 
             let image = result[0].image;
 
-            fs.unlink(`public/assets/img/${image}`, (err) => {
+            fs.unlink(`${image}`, (err) => {
                 if (err) {
                     return res.status(500).send(err);
                 }
@@ -116,5 +116,10 @@ module.exports = {
                 });
             });
         });
+    },
+    serveImage: (req, res, p) => {
+        const id = req.params.id;
+        console.log("id", id)
+        res.sendFile(`${p}/${id}`)
     }
 };

@@ -15,37 +15,21 @@
                     <label for="last-name">Last Name</label>
                     <input type="text" class="form-control" name="last_name" id="last-name" value="<%= player.last_name %>" required>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" name="username" id="username" value="<%= player.user_name %>" required disabled title="Username can't be changed">
-                </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="number">Number</label>
-                    <input type="number" class="form-control" name="number" id="number" placeholder="Number" value="<%= player.number %>" required>
+                    <label for="number">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="email" value="<%= player.email %>" required>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="position">Position</label>
-                    <select id="position" name="position" class="form-control" required>
-                        <option selected><%= player.position %></option>
-                        <option>Goalkeeper</option>
-                        <option>Centre Back</option>
-                        <option>Right Back</option>
-                        <option>Left Back</option>
-                        <option>Defensive Midfielder</option>
-                        <option>Central Midfielder</option>
-                        <option>Attacking Midfielder</option>
-                        <option>Right Wing Forward</option>
-                        <option>Left Wing Forward</option>
-                        <option>Striker</option>
-                    </select>
+                    <label for="number">phone</label>
+                    <input type="number" class="form-control" name="phone" id="phone" placeholder="phone" value="<%= player.phone %>" required>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success float-right">Update Player</button>
+            <button type="submit" class="btn btn-success float-right">Update User</button>
         </form>
     <% } else { %>
-        <p class="text-center">Player Not Found. Go <a href="/add">here</a> to add players.</p>
+        <p class="text-center">User Not Found. Go <a href="/add">here</a> to add users.</p>
     <% } %>
 </div>
 </div>
